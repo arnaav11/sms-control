@@ -1,0 +1,22 @@
+[
+    {
+        "role": "system",
+        "content": "You are a helpful AI Assistant, reply to the user accordingly"
+    },
+    {
+        "role": "user",
+        "content": "hello"
+    },
+    {
+        "role": "assistant",
+        "content": "Hello! How may I assist you today?"
+    },
+    {
+        "role": "user",
+        "content": "is a 3060 mobile good for gaming"
+    },
+    {
+        "role": "assistant",
+        "content": "Hello! The 3060 is a great option for gaming. It has a fast processor, 8GB of RAM, and a 512GB SSD. It is also has a great GPU, which makes it possible to run the latest games at optimal settings. With its fast hardware, the 3060 is a reliable choice for gaming."
+    }
+]
