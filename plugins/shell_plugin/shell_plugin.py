@@ -11,6 +11,7 @@ class ShellPlugin(Plugin):
             allow_chains=allow_chains,
             exe=exe
         )
+        super().__init__()
 
         self.commands = {
             'shell': self.run_command
@@ -22,6 +23,3 @@ class ShellPlugin(Plugin):
         
         else:
             return 'Command not allowed'
-        
-    def get_commands(self) -> dict[str, Callable[[str], str]]:
-        return self.commands
