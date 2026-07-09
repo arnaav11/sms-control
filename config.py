@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 
 from plugins.llm_plugin.llm_plugin import LLMPlugin
 from plugins.shell_plugin.shell_plugin import ShellPlugin
+from plugins.search_plugin.search_plugin import SearchPlugin
 from sms_listener import SMSListener
 from command_parser import CommandParser
 
@@ -51,11 +52,16 @@ shell_plugin = ShellPlugin(
     exe=shell
 )
 
+searxng_url = 'http://localhost:8888/search'
+search_plugin = SearchPlugin(
+    search_url=searxng_url,
+    exe=shell
+)
 
-plugins = [llm_plugin, shell_plugin]
+plugins = [llm_plugin, shell_plugin, search_plugin]
 parser = CommandParser(
-        plugins=plugins
-        )
+    plugins=plugins
+)
 
 
 sms_queue = Queue()
