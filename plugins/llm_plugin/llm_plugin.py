@@ -1,5 +1,3 @@
-from collections.abc import Callable
-
 from plugins.plugin import Plugin
 from plugins.llm_plugin.llm_connector import LLMConnector
 

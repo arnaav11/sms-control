@@ -1,5 +1,3 @@
-from collections.abc import Callable
-
 from plugins.plugin import Plugin
 from plugins.shell_plugin.shell_connector import ShellConnector
 
