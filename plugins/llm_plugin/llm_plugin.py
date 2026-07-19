@@ -1,5 +1,3 @@
-from collections.abc import Callable
-
 from plugins.plugin import Plugin
 from plugins.llm_plugin.llm_connector import LLMConnector
 
@@ -13,6 +11,7 @@ class LLMPlugin(Plugin):
             save_folder: str = './chats',
             system_message: str = 'You are a helpful AI Assistant, reply to the user accordingly'
     ):
+        super().__init__()
 
         self.connector = LLMConnector(
             base_url=base_url,
@@ -70,7 +69,3 @@ class LLMPlugin(Plugin):
             think_end_idx = 0
 
         return response[think_end_idx:]
-
-            
-    def get_commands(self) -> dict[str, Callable[[str], str]]:
-        return self.commands

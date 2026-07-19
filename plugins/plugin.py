@@ -2,7 +2,7 @@ from collections.abc import Callable
 
 class Plugin:
     def __init__(self):
-        pass
+        self.commands = {}
 
     def get_commands(self) -> dict[str, Callable[[str], str]]:
-        pass
+        return self.commands
