@@ -14,6 +14,12 @@ class ShellPlugin(Plugin):
         self.commands = {
             'shell': self.run_command
         }
+        self.usable_tools = {
+            'shell': 'Runs shell command if allowed. Requires shell command as argument'
+        }
+
+    def get_tools(self) -> dict[str, str]:
+        return self.usable_tools
 
     def run_command(self, command: str) -> str:
         if self.connector.allow_command(command):
