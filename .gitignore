@@ -219,3 +219,6 @@ __marimo__/
 
 # VSCode stuff
 .vscode/
+
+# Saved chats
+chats/
