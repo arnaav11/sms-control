@@ -7,7 +7,7 @@ from openai import OpenAI
 from openai.types.chat.chat_completion_message import ChatCompletionMessage
 
 class LLMConnector:
-    def __init__(self, base_url: str, reasoning: str = 'low', max_tokens: int = 4096, system_message: str = 'You are a helpful AI Assistant, reply to the user accordingly'):
+    def __init__(self, base_url: str, model: str = None, reasoning: str = 'none', max_tokens: int = 4096, system_message: str = 'You are a helpful AI Assistant, reply to the user accordingly'):
         self.client = OpenAI(
             base_url = base_url
         )
@@ -17,13 +17,12 @@ class LLMConnector:
         self.reasoning = reasoning
 
         self.max_tokens = max_tokens
-        self.set_model(self.get_models()[0])
+        self.set_model(model or self.get_models()[0])
 
         self.set_reasoning(reasoning)
 
 
         
-
     def get_models(self) -> list[str]:
         return [i.id for i in self.client.models.list().data]
     
@@ -34,6 +33,8 @@ class LLMConnector:
         if model in self.get_models():
             self.model = model
             self.set_reasoning(self.reasoning)
+        else:
+            self.model = self.get_models()[0]
 
         return self.model
     
@@ -51,13 +52,15 @@ class LLMConnector:
             self.reasoning = reasoning
             max_tok = self.max_tokens
             self.max_tokens = 1
-            
-            self.get_direct_response('h')
+
+            print('Testing reasoning validity')
+            self.get_direct_response('')
             self.max_tokens = max_tok
         
         except openai.BadRequestError as e:
+            print('Reasoning invalid')
             print(e.message)
-            self.reasoning = 'low'
+            self.reasoning = None
 
         return self.reasoning
     
