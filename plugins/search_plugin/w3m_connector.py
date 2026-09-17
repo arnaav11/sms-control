@@ -5,7 +5,7 @@ class W3MConnector:
         self.executable = exe
 
     def get_website(self, url: str) -> str:
-        result = subprocess.run(f'w3m -dump "{url}"', shell=True, text=True, executable=self.executable)
+        result = subprocess.run(f'curl -sL "{url}" | w3m -dump -T text/html', shell=True, text=True, executable=self.executable)
         return result.stdout
     
 
