@@ -1,4 +1,5 @@
 import os
+from plugins.plugin import Plugin
 
 from queue import Queue
 from dotenv import load_dotenv
@@ -12,23 +13,6 @@ from command_parser import CommandParser
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 load_dotenv()
 
-base_url = 'https://api.groq.com/openai/v1'
-available_reasoning = ['none', 'low', 'medium', 'high']
-reasoning = 'high'
-max_token = 4096
-chat_save_folder = './chats'
-system_message = 'You are a helpful AI Agent'
-
-llm_plugin = LLMPlugin(
-    base_url=base_url,
-    reasoning=reasoning,
-    available_reasoning=available_reasoning,
-    max_tokens=max_token,
-    save_folder=chat_save_folder,
-    system_message=system_message
-)
-
-llm_plugin.model('openai/gpt-oss-120b')
 
 
 allowed_shell_commands = [
@@ -58,10 +42,32 @@ search_plugin = SearchPlugin(
     exe=shell
 )
 
+base_url = 'https://integrate.api.nvidia.com/v1'
+available_reasoning = ['none', 'low', 'medium', 'high']
+reasoning = 'high'
+max_token = 4096
+chat_save_folder = './chats'
+system_message = 'You are a helpful AI Agent'
+
+llm_plugin = LLMPlugin(
+    base_url=base_url,
+    model='nvidia/nemotron-3-nano-omni-30b-a3b-reasoning',
+    reasoning=reasoning,
+    available_reasoning=available_reasoning,
+    max_tokens=max_token,
+    save_folder=chat_save_folder,
+    system_message=system_message
+)
+
+
 plugins = [llm_plugin, shell_plugin, search_plugin]
 parser = CommandParser(
     plugins=plugins
 )
+
+tools = {}
+for plugin in plugins:
+    tools.update(plugin.get_tools())
 
 
 sms_queue = Queue()
