@@ -7,8 +7,8 @@ from dotenv import load_dotenv
 from plugins.llm_plugin.llm_plugin import LLMPlugin
 from plugins.shell_plugin.shell_plugin import ShellPlugin
 from plugins.search_plugin.search_plugin import SearchPlugin
-from sms_listener import SMSListener
-from command_parser import CommandParser
+from listeners.sms_listener.sms_listener import SMSListener
+from parsers.default_parser.default_parser import DefaultParser
 
 os.chdir(os.path.dirname(os.path.realpath(__file__)))
 load_dotenv()
@@ -61,7 +61,7 @@ llm_plugin = LLMPlugin(
 
 
 plugins = [llm_plugin, shell_plugin, search_plugin]
-parser = CommandParser(
+parser = DefaultParser(
     plugins=plugins
 )
 

@@ -1,13 +1,13 @@
 from queue import Queue, Empty
 
-from sms_listener import SMSListener
-from command_parser import CommandParser
+from listeners.listener import Listener
+from parsers.parser import Parser
 
-def parse_sms(sms_data: dict, parser: CommandParser) -> None:
+def parse_sms(sms_data: dict, parser: Parser) -> None:
     return parser.parse_command(sms_data['content'])
 
 
-def main(sms_queue: Queue, listener: SMSListener, command_parser: CommandParser):
+def main(sms_queue: Queue, listener: Listener, command_parser: DefaultParser):
     listener.start()
     
     try:
