@@ -6,13 +6,13 @@ class LLMPlugin(Plugin):
             self,
             base_url: str,
             tool_messages: list[str],
-            response_tool: dict[str],
+            response_tool: dict[str, str],
             available_reasoning: list[str],
+            tools: dict[str, str],
             
             model: str = None,
             max_tokens: int = 4096,
             reasoning: str = 'none',
-            tools: dict[str, str] = {},
             save_folder: str = './chats',
             system_message: str = 'You are a helpful AI Assistant, reply to the user accordingly'
         ):
@@ -53,7 +53,7 @@ class LLMPlugin(Plugin):
     def get_models(self, command: str = '') -> str:
         return f"Available models: {', '.join(self.connector.get_models())}"
     
-    def get_response_tool(self) -> dict[str]:
+    def get_response_tool(self) -> dict[str, str]:
         return self.response_tool
     
     def get_chat_response(self, prompt: str) -> str:

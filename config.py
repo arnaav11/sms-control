@@ -40,27 +40,32 @@ search_plugin = SearchPlugin(
     exe=shell
 )
 
+
 base_url = 'https://integrate.api.nvidia.com/v1'
-available_reasoning = ['none', 'low', 'medium', 'high']
+model = 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning'
+
 reasoning = 'high'
-max_tokens = 4096
 chat_save_folder = './chats'
 system_message = 'You are a helpful AI Agent'
+max_tokens = 4096
+
+available_reasoning = ['none', 'low', 'medium', 'high']
+response_tool = {'respond': 'Respond to the user. Takes in the response text as the argument'}
+
 tool_messages = [
     'Here are tools:',
     "use them in json with {'tool_name': 'tool_args', 'tool_name'....} reply only in json"
 ]
-response_tool = {'respond': 'Respond to the user. Takes in the response text as the argument'}
-
 
 llm_plugin = LLMPlugin(
     base_url=base_url,
-    model='nvidia/nemotron-3-nano-omni-30b-a3b-reasoning',
+    model=model,
     reasoning=reasoning,
     available_reasoning=available_reasoning,
     max_tokens=max_tokens,
     save_folder=chat_save_folder,
     system_message=system_message,
+    tools = {},
     tool_messages=tool_messages,
     response_tool=response_tool
 )

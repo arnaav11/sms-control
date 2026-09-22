@@ -3,8 +3,12 @@ import threading
 from queue import Queue
 from flask import Flask, request, jsonify
 
-class SMSListener:
+from listeners.listener import Listener
+
+class SMSListener(Listener):
     def __init__(self, data_queue: Queue, port: int = 8008):
+        super().__init__()
+
         self.app = Flask(__name__)
         self.queue = data_queue
         self.port = port
