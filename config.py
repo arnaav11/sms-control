@@ -1,5 +1,4 @@
 import os
-from plugins.plugin import Plugin
 
 from queue import Queue
 from dotenv import load_dotenv
