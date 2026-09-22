@@ -29,6 +29,7 @@ class LLMPlugin(Plugin):
         self.available_reasoning = available_reasoning
         self.save_folder = save_folder
         self.non_command = True
+        self.system_message = system_message
 
         self.usable_tools = tools
         self.tool_messages = tool_messages
@@ -62,6 +63,7 @@ class LLMPlugin(Plugin):
     
     def set_tools(self, tools: dict[str, str]) -> None:
         self.usable_tools = tools
+        self.setup_tool_message()
 
     def set_response_tool(self, response_tool: dict[str]) -> None:
         self.response_tool = response_tool
@@ -100,16 +102,12 @@ class LLMPlugin(Plugin):
             tool_message += f'{n}. {tool}: {self.usable_tools[tool]}'
             n += 1
 
-        cur_msg = self.connector.get_system_message()
+        cur_msg = self.system_message
         self.connector.set_system_message(f'{cur_msg}\n{tool_message}\n{self.tool_messages[1]}')
 
     def reset_chat(self, command: str) -> str:
         convo_file = self.connector.save_conversation(self.save_folder)
         return f'chat reset and saved to {convo_file}'
-
-    def respond(self, command: str) -> str:
-        response = self.connector.get_chat_response(command)
-        return response
     
     def cleanup_reasoning(self, response: str) -> str:
         think_end_tag = '</think>'
