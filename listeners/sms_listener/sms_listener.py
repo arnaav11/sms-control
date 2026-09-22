@@ -1,4 +1,5 @@
 import threading
+import os
 
 from queue import Queue
 from flask import Flask, request, jsonify
@@ -17,6 +18,9 @@ class SMSListener(Listener):
 
     def handle_post(self):
         data = request.get_json() or request.form.to_dict()
+
+        if not request.headers.get("X-API-Key") == os.getenv('SMS_SECRET_KEY'):
+            return jsonify({"status": "error", "message": "No data received"}), 401
         
         if not data:
             return jsonify({"status": "error", "message": "No data received"}), 400
