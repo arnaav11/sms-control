@@ -73,6 +73,9 @@ class LLMPlugin(Plugin):
         elif command in self.available_reasoning:
             reason = self.connector.set_reasoning(command)
             return f'Reasoning set to "{reason}"'
+
+        else:
+            return f'Reasoning not available Choose from {self.available_reasoning}'
         
     
     def model(self, command: str) -> str:
