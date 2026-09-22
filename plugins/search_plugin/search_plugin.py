@@ -15,7 +15,7 @@ class SearchPlugin(Plugin):
             'web_fetch': self.web_fetch
         }
 
-        self.tools = {
+        self.usable_tools = {
             'search': 'Search the web with a query. Takes the query/search as the arg',
             'web_fetch': 'Get contents of a webpage in plaintext. takes the URL as the arg'
         }
