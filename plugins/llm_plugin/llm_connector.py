@@ -74,7 +74,7 @@ class LLMConnector:
             'content': sys_msg
         }
     
-    def get_chat(self) -> list[dict[str: str]]:
+    def get_chat(self) -> list[dict[str, str]]:
         return self.chat
     
     def set_chat(self, chat = list[dict[str, str]]) -> None:

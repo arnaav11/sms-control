@@ -18,7 +18,7 @@ class ShellConnector:
 if __name__ == '__main__':
     from config import allowed_shell_commands, shell
 
-    tester = ShellConnector(allowed_shell_commands, exec=shell)
+    tester = ShellConnector(allowed_commands=allowed_shell_commands, exe=shell)
 
     test_command = input('Enter Command: ')
 
