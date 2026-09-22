@@ -6,6 +6,8 @@ class DefaultParser(Parser):
         super().__init__(plugins)
 
     def parse_command(self, command_str: str) -> str:
+        command_str = command_str.strip()
+
         if len(command_str) < 2 or command_str[0] != '/':
             return ''
         
