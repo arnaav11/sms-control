@@ -96,13 +96,13 @@ class LLMPlugin(Plugin):
 
 
     def setup_tool_message(self) -> None:
-        tool_message = self.tool_messages[0]
+        tool_message = self.tool_messages[0] + '\n'
 
         n = 1
         total_tools = self.usable_tools.copy()
         total_tools.update(self.response_tool)
         for tool in total_tools:
-            tool_message += f'{n}. {tool}: {total_tools[tool]}'
+            tool_message += f'{n}. {tool}: {total_tools[tool]}\n'
             n += 1
 
         cur_msg = self.system_message
