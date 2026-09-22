@@ -1,12 +1,39 @@
 import subprocess
 
+from urllib.parse import urlparse
+from urllib.request import Request, urlopen
+
 class W3MConnector:
-    def __init__(self, exe: str = '/bin/fish'):
+    def __init__(self, exe: str = '/bin/fish', timeout: int = 10):
         self.executable = exe
+        self.timeout = timeout
 
     def get_website(self, url: str) -> str:
-        result = subprocess.run(f'curl -sL "{url}" | w3m -dump -T text/html', shell=True, text=True, executable=self.executable)
-        return result.stdout
+        if not self.validate_url(url):
+            return ''
+
+        req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
+        with urlopen(req, timeout=self.timeout) as response:
+            website_html = response.read()
+
+        return self.parse_html(website_html)
+
+    def validate_url(self, url: str) -> bool:
+        parsed_url = urlparse(url.strip())
+        return parsed_url.scheme in ("http", "https")
+
+    def parse_html(self, html: str) -> str:
+        w3m_output = subprocess.run(
+            ["w3m", "-dump", "-T", "text/html"],
+            input=html,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=True,
+            text=True
+        )
+
+        return w3m_output.stdout
+        
     
 
 if __name__ == '__main__':
