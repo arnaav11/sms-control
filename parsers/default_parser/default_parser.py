@@ -1,8 +1,9 @@
 from plugins.plugin import Plugin
+from parsers.parser import Parser
 
-class CommandParser:
+class DefaultParser(Parser):
     def __init__(self, plugins: list[Plugin]):
-        self.plugins = plugins
+        super().__init__(plugins)
 
     def parse_command(self, command_str: str) -> str:
         if command_str[0] != '/':
@@ -20,12 +21,11 @@ class CommandParser:
                 method = self.plugins[i].get_commands()[command[0]]
                 return method(args)
 
-
     
 if __name__ == '__main__':
     from config import *
 
-    tester = CommandParser(
+    tester = DefaultParser(
         plugins=plugins
     )
 
