@@ -20,7 +20,7 @@ class ShellPlugin(Plugin):
         return self.usable_tools
 
     def run_command(self, command: str) -> str:
-        if self.connector.allow_command(command):
+        if self.connector.allow_command(command.split()):
             return self.connector.run_command(command).stdout
         else:
             return 'Command not allowed'
