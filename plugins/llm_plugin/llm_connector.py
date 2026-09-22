@@ -77,12 +77,8 @@ class LLMConnector:
     def get_chat(self) -> list[dict[str: str]]:
         return self.chat
     
-    def set_chat(self, chat = list[dict[str: str]]) -> None:
+    def set_chat(self, chat = list[dict[str, str]]) -> None:
         self.chat = chat
-
-    def load_chat(self, chat_file: str) -> None:
-        with open(chat_file, 'r') as file:
-            self.set_chat(json.load(chat_file))
 
     def reset_chat(self) -> None:
         self.chat = [
@@ -96,6 +92,8 @@ class LLMConnector:
         filename = os.path.join(save_folder, f'{datetime.now()}.json')
         with open(filename, 'w') as file:
             json.dump(self.chat, file, indent=4)
+
+        return filename
 
     def load_conversation(self, convo_file: str) -> None:
         with open(convo_file, 'r') as file:
