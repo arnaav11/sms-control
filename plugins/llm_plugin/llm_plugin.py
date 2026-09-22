@@ -102,7 +102,7 @@ class LLMPlugin(Plugin):
         total_tools = self.usable_tools.copy()
         total_tools.update(self.response_tool)
         for tool in total_tools:
-            tool_message += f'{n}. {tool}: {self.usable_tools[tool]}'
+            tool_message += f'{n}. {tool}: {total_tools[tool]}'
             n += 1
 
         cur_msg = self.system_message
