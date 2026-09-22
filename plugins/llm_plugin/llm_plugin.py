@@ -67,6 +67,7 @@ class LLMPlugin(Plugin):
 
     def set_response_tool(self, response_tool: dict[str]) -> None:
         self.response_tool = response_tool
+        self.setup_tool_message()
 
 
     def reasoning(self, command: str) -> str:
@@ -98,6 +99,8 @@ class LLMPlugin(Plugin):
         tool_message = self.tool_messages[0]
 
         n = 1
+        total_tools = self.usable_tools.copy()
+        total_tools.update(self.response_tool)
         for tool in self.usable_tools:
             tool_message += f'{n}. {tool}: {self.usable_tools[tool]}'
             n += 1
