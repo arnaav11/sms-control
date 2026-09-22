@@ -101,7 +101,7 @@ class LLMPlugin(Plugin):
         n = 1
         total_tools = self.usable_tools.copy()
         total_tools.update(self.response_tool)
-        for tool in self.usable_tools:
+        for tool in total_tools:
             tool_message += f'{n}. {tool}: {self.usable_tools[tool]}'
             n += 1
 
