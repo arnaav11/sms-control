@@ -12,7 +12,9 @@ class LLMPlugin(Plugin):
             tools: dict[str, str] = {},
             save_folder: str = './chats',
             system_message: str = 'You are a helpful AI Assistant, reply to the user accordingly',
-            tool_messages: list[str] = ['Here are tools:', "use them in json with {'tool_name': 'tool_args', 'tool_name'....} reply only in json"]):
+            tool_messages: list[str] = ['Here are tools:', "use them in json with {'tool_name': 'tool_args', 'tool_name'....} reply only in json"],
+            response_tool: dict[str] = {'respond': 'Respond to the user. Takes in the response text as te argument'}
+        ):
         super().__init__()
 
         self.connector = LLMConnector(
@@ -29,6 +31,8 @@ class LLMPlugin(Plugin):
 
         self.usable_tools = tools
         self.tool_messages = tool_messages
+        self.response_tool = {}
+        self.set_response_tool(response_tool)
         self.setup_tool_message()
 
         self.commands = {
@@ -36,13 +40,32 @@ class LLMPlugin(Plugin):
             'reasoning': self.reasoning,
             'models': self.get_models,
             'model': self.model,
-            'reset_chat': self.reset_chat,
-            '': self.respond
+            'reset_chat': self.reset_chat
         }
 
+    def get_tools(self) -> dict[str, str]:
+        return self.usable_tools
+
+    def get_tool_messages(self) -> list[str]:
+        return self.tool_messages
+    
+    def get_models(self, command: str = '') -> str:
+        return f'Available models: {', '.join(self.connector.get_models())}'
+    
+    def get_response_tool(self) -> dict[str]:
+        return self.response_tool
+    
     def get_chat_response(self, prompt: str) -> str:
         return self.cleanup_reasoning(self.connector.get_chat_response(prompt).content or 'No Response')
+
     
+    def set_tools(self, tools: dict[str, str]) -> None:
+        self.usable_tools = tools
+
+    def set_response_tool(self, response_tool: dict[str]) -> None:
+        self.response_tool = response_tool
+
+
     def reasoning(self, command: str) -> str:
         if command == '':
             return f'Reasoning is currently "{self.connector.get_reasoning()}"'
@@ -51,8 +74,6 @@ class LLMPlugin(Plugin):
             reason = self.connector.set_reasoning(command)
             return f'Reasoning set to "{reason}"'
         
-    def get_models(self, command: str = '') -> str:
-        return f'Available models: {', '.join(self.connector.get_models())}'
     
     def model(self, command: str) -> str:
         if command == '':
@@ -65,11 +86,7 @@ class LLMPlugin(Plugin):
             else:
                 return f'Model not available'
 
-    def set_tools(self, tools: dict[str, str]) -> None:
-        self.usable_tools = tools
 
-    def get_tools(self) -> dict[str, str]:
-        return self.usable_tools
 
     def setup_tool_message(self) -> None:
         tool_message = self.tool_messages[0]
