@@ -1,29 +1,18 @@
+import shlex
 import subprocess
 
 class ShellConnector:
-    def __init__(self, allowed_commands: list, allow_piping: bool = False, allow_chains: bool = False, exe: str = '/bin/fish'):
+    def __init__(self, allowed_commands: list, exe: str = '/bin/fish'):
         self.allowed_commands = allowed_commands
-        self.allow_chains = allow_chains
-        self.allow_piping = allow_piping
         self.executable = exe
 
     def run_command(self, command: str) -> subprocess.CompletedProcess[str]:
-        output = subprocess.run(command, shell=True, text=True, executable=self.executable, capture_output=True)
-        return output
-    
-    def run_command(self, command: str) -> subprocess.CompletedProcess[str]:
-        output = subprocess.run(command, shell=True, text=True, executable=self.executable, capture_output=True)
+        command_split = shlex.split(command)
+        output = subprocess.run(command_split, shell=False, text=True, executable=self.executable, capture_output=True)
         return output
 
-    def allow_command(self, command: str) -> bool:
-        if command.split()[0] not in self.allowed_commands:
-            return False
-        if '&' in command and not self.allow_chains:
-            return False
-        if '|' in command and not self.allow_piping:
-            return False
-        
-        return True
+    def allow_command(self, command_split: list[str]) -> bool:
+        return command_split and command_split[0] in self.allowed_commands
     
 
 if __name__ == '__main__':

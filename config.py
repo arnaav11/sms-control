@@ -31,8 +31,6 @@ shell = '/usr/bin/fish'
 
 shell_plugin = ShellPlugin(
     allowed_commands=allowed_shell_commands,
-    allow_piping=allow_piping,
-    allow_chains=allow_chains,
     exe=shell
 )
 
