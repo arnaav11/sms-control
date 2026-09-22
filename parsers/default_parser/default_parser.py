@@ -21,7 +21,6 @@ class DefaultParser(Parser):
                 method = self.plugins[i].get_commands()[command[0]]
                 return method(args)
 
-
     
 if __name__ == '__main__':
     from config import *
