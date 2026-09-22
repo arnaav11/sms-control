@@ -43,29 +43,36 @@ search_plugin = SearchPlugin(
 base_url = 'https://integrate.api.nvidia.com/v1'
 available_reasoning = ['none', 'low', 'medium', 'high']
 reasoning = 'high'
-max_token = 4096
+max_tokens = 4096
 chat_save_folder = './chats'
 system_message = 'You are a helpful AI Agent'
+tool_messages = [
+    'Here are tools:',
+    "use them in json with {'tool_name': 'tool_args', 'tool_name'....} reply only in json"
+]
+response_tool = {'respond': 'Respond to the user. Takes in the response text as the argument'}
+
 
 llm_plugin = LLMPlugin(
     base_url=base_url,
     model='nvidia/nemotron-3-nano-omni-30b-a3b-reasoning',
     reasoning=reasoning,
     available_reasoning=available_reasoning,
-    max_tokens=max_token,
+    max_tokens=max_tokens,
     save_folder=chat_save_folder,
-    system_message=system_message
+    system_message=system_message,
+    tool_messages=tool_messages,
+    response_tool=response_tool
 )
 
 
 plugins = [llm_plugin, shell_plugin, search_plugin]
-parser = DefaultParser(
-    plugins=plugins
-)
+parser = DefaultParser(plugins=plugins)
 
 tools = {}
 for plugin in plugins:
     tools.update(plugin.get_tools())
+llm_plugin.set_tools(tools)
 
 
 sms_queue = Queue()

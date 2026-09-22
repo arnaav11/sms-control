@@ -5,15 +5,16 @@ class LLMPlugin(Plugin):
     def __init__(
             self,
             base_url: str,
+            tool_messages: list[str],
+            response_tool: dict[str],
+            available_reasoning: list[str],
+            
             model: str = None,
-            reasoning: str = 'none',
-            available_reasoning: list[str] = ['none', 'high'],
             max_tokens: int = 4096,
+            reasoning: str = 'none',
             tools: dict[str, str] = {},
             save_folder: str = './chats',
-            system_message: str = 'You are a helpful AI Assistant, reply to the user accordingly',
-            tool_messages: list[str] = ['Here are tools:', "use them in json with {'tool_name': 'tool_args', 'tool_name'....} reply only in json"],
-            response_tool: dict[str] = {'respond': 'Respond to the user. Takes in the response text as te argument'}
+            system_message: str = 'You are a helpful AI Assistant, reply to the user accordingly'
         ):
         super().__init__()
 
@@ -50,7 +51,7 @@ class LLMPlugin(Plugin):
         return self.tool_messages
     
     def get_models(self, command: str = '') -> str:
-        return f'Available models: {', '.join(self.connector.get_models())}'
+        return f"Available models: {', '.join(self.connector.get_models())}"
     
     def get_response_tool(self) -> dict[str]:
         return self.response_tool
@@ -87,7 +88,7 @@ class LLMPlugin(Plugin):
             if set_model:
                 return f'Model set to {set_model}'
             else:
-                return f'Model not available'
+                return 'Model not available'
 
 
 
