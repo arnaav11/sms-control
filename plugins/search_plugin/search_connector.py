@@ -30,7 +30,7 @@ if __name__ == '__main__':
 
     for i in results:
         print('-x-x-x-')
-        print(f'URL: {i['url']}')
-        print(f'Title: {i['title']}')
-        print(f'Snippet: {i['content']}')
+        print(f'URL: {i["url"]}')
+        print(f'Title: {i["title"]}')
+        print(f'Snippet: {i["content"]}')
         print('-x-x-x-\n')
