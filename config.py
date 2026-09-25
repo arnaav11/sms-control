@@ -24,7 +24,7 @@ allowed_shell_commands = [
 ]
 
 shell_plugin = ShellPlugin(
-    allowed_commands=allowed_shell_commands,
+    allowed_commands=allowed_shell_commands
 )
 
 searxng_url = 'http://localhost:8888/search'
@@ -45,8 +45,8 @@ available_reasoning = ['none', 'low', 'medium', 'high']
 response_tool = {'respond': 'Respond to the user. Takes in the response text as the argument'}
 
 tool_messages = [
-    "Here are tools:",
-    "use them in json with {'tool_name': {'args': 'tool_args', 'callback': bool}, 'tool_name'....} reply only in json. The callback is for whether you want the output of the tool call to be returned back to you"
+    'Here are tools:',
+    'use them in json with {"tool_name": {"args": "tool_args", "callback": bool}, "tool_name"....} reply only in json. The callback is for whether you want the output of the tool call to be returned back to you. You can use as many tools as you want.'
 ]
 
 llm_plugin = LLMPlugin(
