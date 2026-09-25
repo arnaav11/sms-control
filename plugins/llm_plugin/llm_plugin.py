@@ -68,7 +68,7 @@ class LLMPlugin(Plugin):
                 'description': 'Resets chat and saves it in JSON'
             },
             'respond': {
-                'method': None,
+                'method': lambda: '',
                 'description': 'Respond to the user, Only for the LLM for agentic tasks'
             }
         }
