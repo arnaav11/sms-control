@@ -10,14 +10,15 @@ class SearchPlugin(Plugin):
         self.search_connector = SearchConnector(base_url=search_url)
         self.w3m_connector = W3MConnector(exe=exe)
 
-        self.commands = {
-            'search': self.search,
-            'web_fetch': self.web_fetch
-        }
-
-        self.usable_tools = {
-            'search': 'Search the web with a query. Takes the query/search as the arg',
-            'web_fetch': 'Get contents of a webpage in plaintext. takes the URL as the arg'
+        self.tools = {
+            'search': {
+                'method': self.search,
+                'description': 'Search the web with a query. Takes the query/search as the arg'
+            },
+            'web_fetch': {
+                'method': self.web_fetch,
+                'description': 'Get contents of a webpage in plaintext. takes the URL as the arg'
+            }
         }
 
     def search(self, command: str) -> str:

@@ -8,9 +8,10 @@ class LLMPlugin(Plugin):
             tool_messages: list[str],
             response_tool: dict[str, str],
             available_reasoning: list[str],
-            tools: dict[str, str],
+            available_tools: dict[str, str],
             
             model: str = None,
+            use_tools: bool = True,
             max_tokens: int = 4096,
             reasoning: str = 'none',
             save_folder: str = './chats',
@@ -28,10 +29,10 @@ class LLMPlugin(Plugin):
 
         self.available_reasoning = available_reasoning
         self.save_folder = save_folder
-        self.non_command = True
+        self.tool_calling = use_tools
         self.system_message = system_message
 
-        self.usable_tools = tools
+        self.tools = available_tools
         self.tool_messages = tool_messages
         self.response_tool = {}
         self.set_response_tool(response_tool)
@@ -45,8 +46,18 @@ class LLMPlugin(Plugin):
             'reset_chat': self.reset_chat
         }
 
-    def get_tools(self) -> dict[str, str]:
-        return self.usable_tools
+        self.callback_method = 'chat'
+
+        self.tools = {
+            'chat': {
+                'method': self.get_chat_response,
+                'description': 'send a message to the LLM and get a response. Takes the prompt as the argument'
+            },
+            'reasoning': {
+                'method': self.reasoning,
+                'description': ''
+            }
+        }
 
     def get_tool_messages(self) -> list[str]:
         return self.tool_messages
@@ -61,13 +72,16 @@ class LLMPlugin(Plugin):
         return self.cleanup_reasoning(self.connector.get_chat_response(prompt).content or 'No Response')
 
     
-    def set_tools(self, tools: dict[str, str]) -> None:
-        self.usable_tools = tools
+    def set_available_tools(self, tools: dict[str, str]) -> None:
+        self.tools = tools
         self.setup_tool_message()
 
     def set_response_tool(self, response_tool: dict[str]) -> None:
         self.response_tool = response_tool
         self.setup_tool_message()
+
+    def set_tool_messages(self, tool_messages: dict[str, str]) -> None:
+        self.tool_messages = tool_messages
 
 
     def reasoning(self, command: str) -> str:
@@ -99,7 +113,7 @@ class LLMPlugin(Plugin):
         tool_message = self.tool_messages[0] + '\n'
 
         n = 1
-        total_tools = self.usable_tools.copy()
+        total_tools = self.tools.copy()
         total_tools.update(self.response_tool)
         for tool in total_tools:
             tool_message += f'{n}. {tool}: {total_tools[tool]}\n'
