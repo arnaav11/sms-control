@@ -41,7 +41,7 @@ search_plugin = SearchPlugin(
 
 
 base_url = 'https://integrate.api.nvidia.com/v1'
-model = 'nvidia/nemotron-3-nano-omni-30b-a3b-reasoning'
+model = 'nvidia/nemotron-3-ultra-550b-a55b'
 
 reasoning = 'high'
 chat_save_folder = './chats'
@@ -52,8 +52,8 @@ available_reasoning = ['none', 'low', 'medium', 'high']
 response_tool = {'respond': 'Respond to the user. Takes in the response text as the argument'}
 
 tool_messages = [
-    'Here are tools:',
-    "use them in json with {'tool_name': 'tool_args', 'tool_name'....} reply only in json"
+    "Here are tools:",
+    "use them in json with {'tool_name': {'args': 'tool_args', 'callback': bool}, 'tool_name'....} reply only in json. The callback is for whether you want the output of the tool call to be returned back to you"
 ]
 
 llm_plugin = LLMPlugin(
@@ -64,7 +64,7 @@ llm_plugin = LLMPlugin(
     max_tokens=max_tokens,
     save_folder=chat_save_folder,
     system_message=system_message,
-    tools = {},
+    available_tools = {},
     tool_messages=tool_messages,
     response_tool=response_tool
 )
@@ -76,7 +76,7 @@ parser = DefaultParser(plugins=plugins)
 tools = {}
 for plugin in plugins:
     tools.update(plugin.get_tools())
-llm_plugin.set_tools(tools)
+llm_plugin.set_available_tools(tools)
 
 
 sms_queue = Queue()

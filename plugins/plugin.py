@@ -1,13 +1,13 @@
-from collections.abc import Callable
+from typing import Callable, Literal
 
 class Plugin:
     def __init__(self):
-        self.commands = {}
-        self.non_command = False
-        self.usable_tools = {}
+        self.tool_calling = False
+        self.tools = {}
+        self.callback_method = ''
 
-    def get_commands(self) -> dict[str, Callable[[str], str]]:
-        return self.commands
+    def get_tools(self) -> dict[str, dict[Literal['method', 'description'], Callable[[str], str] | str]]:
+        return self.tools
 
-    def get_tools(self) -> dict[str, str]:
-        return self.usable_tools
+    def set_tools(self) -> None:
+        self.tools = {}
