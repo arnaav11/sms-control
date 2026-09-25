@@ -21,7 +21,6 @@ class LLMConnector:
 
         self.set_reasoning(reasoning)
 
-
         
     def get_models(self) -> list[str]:
         return [i.id for i in self.client.models.list().data]

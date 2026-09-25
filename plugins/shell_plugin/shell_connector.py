@@ -2,9 +2,8 @@ import shlex
 import subprocess
 
 class ShellConnector:
-    def __init__(self, allowed_commands: list, exe: str = '/bin/fish'):
+    def __init__(self, allowed_commands: list):
         self.allowed_commands = allowed_commands
-        self.executable = exe
 
     def run_command(self, command: str) -> subprocess.CompletedProcess[str]:
         command_split = shlex.split(command)
