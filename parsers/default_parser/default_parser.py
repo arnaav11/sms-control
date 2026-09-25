@@ -35,28 +35,30 @@ class DefaultParser(Parser):
         try:
             tool_call = json.loads(call_str)
         except json.decoder.JSONDecodeError:
+            print(f'Not a tool or error occured.\nTool: {call_str}\n')
             return call_str
 
         print('Received agentic tool calls: ')
         print(tool_call)
         print()
 
-
+        output = ''
+        callback_output = ''
         for tool in tool_call:
             if tool == 'respond':
-                return tool_call[tool]['args']
+                output += f"{tool_call[tool]['args']}\n\n"
 
             tool_call_str = f'/{tool} {tool_call[tool]['args']}'
-            cmd_output = self.parse_command(tool_call_str)
+            tool_call_output = self.parse_command(tool_call_str)
 
-            if tool_call[tool]['callback']:
-                callback_command = f'/{plugin.callback_method} {cmd_output}'
-                return self.parse_command(callback_command)
-            else:
-                return cmd_output
+            if 'callback' in tool_call[tool] and tool_call[tool]['callback']:
+                callback_output += f'\n{tool_call_str} \n{tool_call_output}\n'
 
-        return ''
+        if callback_output:
+            callback_command = f'/{plugin.callback_method} {tool_call_output}'
+            output += f"\n{self.parse_command(callback_command)}\n"
 
+        return output
 
     
 if __name__ == '__main__':
