@@ -8,7 +8,7 @@ class ShellConnector:
 
     def run_command(self, command: str) -> subprocess.CompletedProcess[str]:
         command_split = shlex.split(command)
-        output = subprocess.run(command_split, shell=False, text=True, executable=self.executable, capture_output=True)
+        output = subprocess.run(command_split, shell=False, text=True, capture_output=True)
         return output
 
     def allow_command(self, command_split: list[str]) -> bool:

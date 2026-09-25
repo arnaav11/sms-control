@@ -23,20 +23,13 @@ allowed_shell_commands = [
     'koboldcpp'
 ]
 
-allow_piping = False
-allow_chains = False
-
-shell = '/usr/bin/fish'
-
 shell_plugin = ShellPlugin(
     allowed_commands=allowed_shell_commands,
-    exe=shell
 )
 
 searxng_url = 'http://localhost:8888/search'
 search_plugin = SearchPlugin(
     search_url=searxng_url,
-    exe=shell
 )
 
 
