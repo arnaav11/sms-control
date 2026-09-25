@@ -5,15 +5,17 @@ class LLMPlugin(Plugin):
     def __init__(
             self,
             base_url: str,
+            tool_messages: list[str],
+            response_tool: dict[str, str],
+            available_reasoning: list[str],
+            available_tools: dict[str, str],
+            
             model: str = None,
-            reasoning: str = 'none',
-            available_reasoning: list[str] = ['none', 'high'],
+            use_tools: bool = True,
             max_tokens: int = 4096,
-            tools: dict[str, str] = {},
+            reasoning: str = 'none',
             save_folder: str = './chats',
-            system_message: str = 'You are a helpful AI Assistant, reply to the user accordingly',
-            tool_messages: list[str] = ['Here are tools:', "use them in json with {'tool_name': 'tool_args', 'tool_name'....} reply only in json"],
-            response_tool: dict[str] = {'respond': 'Respond to the user. Takes in the response text as te argument'}
+            system_message: str = 'You are a helpful AI Assistant, reply to the user accordingly'
         ):
         super().__init__()
 
@@ -27,9 +29,10 @@ class LLMPlugin(Plugin):
 
         self.available_reasoning = available_reasoning
         self.save_folder = save_folder
-        self.non_command = True
+        self.tool_calling = use_tools
+        self.system_message = system_message
 
-        self.usable_tools = tools
+        self.tools = available_tools
         self.tool_messages = tool_messages
         self.response_tool = {}
         self.set_response_tool(response_tool)
@@ -43,27 +46,42 @@ class LLMPlugin(Plugin):
             'reset_chat': self.reset_chat
         }
 
-    def get_tools(self) -> dict[str, str]:
-        return self.usable_tools
+        self.callback_method = 'chat'
+
+        self.tools = {
+            'chat': {
+                'method': self.get_chat_response,
+                'description': 'send a message to the LLM and get a response. Takes the prompt as the argument'
+            },
+            'reasoning': {
+                'method': self.reasoning,
+                'description': ''
+            }
+        }
 
     def get_tool_messages(self) -> list[str]:
         return self.tool_messages
     
     def get_models(self, command: str = '') -> str:
-        return f'Available models: {', '.join(self.connector.get_models())}'
+        return f"Available models: {', '.join(self.connector.get_models())}"
     
-    def get_response_tool(self) -> dict[str]:
+    def get_response_tool(self) -> dict[str, str]:
         return self.response_tool
     
     def get_chat_response(self, prompt: str) -> str:
         return self.cleanup_reasoning(self.connector.get_chat_response(prompt).content or 'No Response')
 
     
-    def set_tools(self, tools: dict[str, str]) -> None:
-        self.usable_tools = tools
+    def set_available_tools(self, tools: dict[str, str]) -> None:
+        self.tools = tools
+        self.setup_tool_message()
 
     def set_response_tool(self, response_tool: dict[str]) -> None:
         self.response_tool = response_tool
+        self.setup_tool_message()
+
+    def set_tool_messages(self, tool_messages: dict[str, str]) -> None:
+        self.tool_messages = tool_messages
 
 
     def reasoning(self, command: str) -> str:
@@ -87,28 +105,26 @@ class LLMPlugin(Plugin):
             if set_model:
                 return f'Model set to {set_model}'
             else:
-                return f'Model not available'
+                return 'Model not available'
 
 
 
     def setup_tool_message(self) -> None:
-        tool_message = self.tool_messages[0]
+        tool_message = self.tool_messages[0] + '\n'
 
         n = 1
-        for tool in self.usable_tools:
-            tool_message += f'{n}. {tool}: {self.usable_tools[tool]}'
+        total_tools = self.tools.copy()
+        total_tools.update(self.response_tool)
+        for tool in total_tools:
+            tool_message += f'{n}. {tool}: {total_tools[tool]}\n'
             n += 1
 
-        cur_msg = self.connector.get_system_message()
+        cur_msg = self.system_message
         self.connector.set_system_message(f'{cur_msg}\n{tool_message}\n{self.tool_messages[1]}')
 
     def reset_chat(self, command: str) -> str:
         convo_file = self.connector.save_conversation(self.save_folder)
         return f'chat reset and saved to {convo_file}'
-
-    def respond(self, command: str) -> str:
-        response = self.connector.get_chat_response(command)
-        return response
     
     def cleanup_reasoning(self, response: str) -> str:
         think_end_tag = '</think>'

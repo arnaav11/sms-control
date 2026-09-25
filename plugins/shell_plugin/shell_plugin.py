@@ -4,23 +4,22 @@ from plugins.shell_plugin.shell_connector import ShellConnector
 class ShellPlugin(Plugin):
     def __init__(self, allowed_commands: list, exe: str = '/bin/fish'):
         self.connector = ShellConnector(
-            allowed_commands=allowed_commands,
-            exe=exe
+            allowed_commands=allowed_commands
         )
         super().__init__()
 
-        self.commands = {
-            'shell': self.run_command
-        }
-        self.usable_tools = {
-            'shell': 'Runs shell command if allowed. Requires shell command as argument'
+        self.tools = {
+            'shell': {
+                'method': self.run_command,
+                'description': f'Runs shell command if allowed. Requires shell command as argument'
+            }
         }
 
     def get_tools(self) -> dict[str, str]:
-        return self.usable_tools
+        return self.tools
 
     def run_command(self, command: str) -> str:
-        if self.connector.allow_command(command):
+        if self.connector.allow_command(command.split()):
             return self.connector.run_command(command).stdout
         else:
             return 'Command not allowed'

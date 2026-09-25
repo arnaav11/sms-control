@@ -2,13 +2,12 @@ import shlex
 import subprocess
 
 class ShellConnector:
-    def __init__(self, allowed_commands: list, exe: str = '/bin/fish'):
+    def __init__(self, allowed_commands: list):
         self.allowed_commands = allowed_commands
-        self.executable = exe
 
     def run_command(self, command: str) -> subprocess.CompletedProcess[str]:
         command_split = shlex.split(command)
-        output = subprocess.run(command_split, shell=False, text=True, executable=self.executable, capture_output=True)
+        output = subprocess.run(command_split, shell=False, text=True, capture_output=True)
         return output
 
     def allow_command(self, command_split: list[str]) -> bool:
@@ -18,7 +17,7 @@ class ShellConnector:
 if __name__ == '__main__':
     from config import allowed_shell_commands, shell
 
-    tester = ShellConnector(allowed_shell_commands, exec=shell)
+    tester = ShellConnector(allowed_commands=allowed_shell_commands, exe=shell)
 
     test_command = input('Enter Command: ')
 

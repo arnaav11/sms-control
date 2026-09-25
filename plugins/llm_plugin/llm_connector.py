@@ -21,7 +21,6 @@ class LLMConnector:
 
         self.set_reasoning(reasoning)
 
-
         
     def get_models(self) -> list[str]:
         return [i.id for i in self.client.models.list().data]
@@ -74,7 +73,7 @@ class LLMConnector:
             'content': sys_msg
         }
     
-    def get_chat(self) -> list[dict[str: str]]:
+    def get_chat(self) -> list[dict[str, str]]:
         return self.chat
     
     def set_chat(self, chat = list[dict[str, str]]) -> None:

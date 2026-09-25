@@ -7,7 +7,7 @@ def parse_sms(sms_data: dict, parser: Parser) -> None:
     return parser.parse_command(sms_data['content'])
 
 
-def main(sms_queue: Queue, listener: Listener, command_parser: DefaultParser):
+def main(sms_queue: Queue, listener: Listener, command_parser: Parser):
     listener.start()
     
     try:
@@ -22,6 +22,8 @@ def main(sms_queue: Queue, listener: Listener, command_parser: DefaultParser):
 
             except Empty:
                 pass
+            except Exception as e:
+                print(f'Error occurred: \n{repr(e)}\n')
 
     except KeyboardInterrupt:
         print("\n[Main Program] Shutting down...")

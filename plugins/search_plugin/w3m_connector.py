@@ -14,7 +14,8 @@ class W3MConnector:
 
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
         with urlopen(req, timeout=self.timeout) as response:
-            website_html = response.read()
+            charset = response.headers.get_content_charset() or "utf-8"
+            website_html = response.read().decode(charset, errors="replace")
 
         return self.parse_html(website_html)
 
