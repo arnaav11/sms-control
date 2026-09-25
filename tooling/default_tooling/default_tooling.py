@@ -41,9 +41,12 @@ class DefaultTooling(Tooling):
         print(f'tool call: {tools}')
 
         for tool in tools:
-            tool_call_output = self.call_tool(tool, tools[tool])
-            result['output'] += tool_call_output['output']
-            result['callback_output'] += tool_call_output['callback_output']
+            try:
+                tool_call_output = self.call_tool(tool, tools[tool])
+                result['output'] += tool_call_output['output']
+                result['callback_output'] += tool_call_output['callback_output']
+            except Exception as e:
+                result['output'] = repr(e)
 
         return result
 
