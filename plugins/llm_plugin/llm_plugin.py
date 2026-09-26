@@ -5,7 +5,6 @@ class LLMPlugin(Plugin):
     def __init__(
             self,
             base_url: str,
-            response_tool: dict[str, str],
             available_reasoning: list[str],
             available_tools: dict[str, str],
             
@@ -33,7 +32,7 @@ class LLMPlugin(Plugin):
 
         self.tools = available_tools
         self.response_tool = {}
-        self.set_response_tool(response_tool)
+        self.set_response_tool()
         self.setup_tool_message()
 
         self.commands = {
@@ -87,10 +86,6 @@ class LLMPlugin(Plugin):
         self.tools = tools
         self.setup_tool_message()
 
-    def set_response_tool(self, response_tool: dict[str]) -> None:
-        self.response_tool = response_tool
-        self.setup_tool_message()
-
 
     def reasoning(self, command: str) -> str:
         if command == '':
@@ -114,16 +109,13 @@ class LLMPlugin(Plugin):
                 return f'Model set to {set_model}'
             else:
                 return 'Model not available'
-
-
+            
 
     def setup_tool_message(self) -> None:
         tool_message = ''
         n = 1
-        total_tools = self.tools.copy()
-        total_tools.update(self.response_tool)
-        for tool in total_tools:
-            tool_message += f'{n}. {tool}: {total_tools[tool]}\n'
+        for tool in self.tools:
+            tool_message += f'{n}. {tool}: {self.tools[tool]}\n'
             n += 1
 
         self.cur_msg = self.system_message

@@ -63,8 +63,7 @@ llm_plugin = LLMPlugin(
     max_tokens=max_tokens,
     save_folder=chat_save_folder,
     system_message=system_message,
-    available_tools = {},
-    response_tool=response_tool
+    available_tools = {}
 )
 
 
