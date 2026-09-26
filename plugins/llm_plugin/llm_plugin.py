@@ -31,17 +31,7 @@ class LLMPlugin(Plugin):
         self.system_message = system_message
 
         self.tools = available_tools
-        self.response_tool = {}
-        self.set_response_tool()
         self.setup_tool_message()
-
-        self.commands = {
-            'chat': self.get_chat_response,
-            'reasoning': self.reasoning,
-            'models': self.get_models,
-            'model': self.model,
-            'reset_chat': self.reset_chat
-        }
 
         self.callback_method = 'chat'
 
@@ -67,7 +57,7 @@ class LLMPlugin(Plugin):
                 'description': 'Resets chat and saves it in JSON'
             },
             'respond': {
-                'method': lambda: '',
+                'method': lambda x: '',
                 'description': 'Respond to the user, Only for the LLM for agentic tasks'
             }
         }
