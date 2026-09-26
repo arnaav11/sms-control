@@ -65,9 +65,6 @@ class LLMPlugin(Plugin):
     def get_models(self, command: str = '') -> str:
         return f"Available models: {', '.join(self.connector.get_models())}"
     
-    def get_response_tool(self) -> dict[str, str]:
-        return self.response_tool
-    
     def get_chat_response(self, prompt: str) -> str:
         return self.cleanup_reasoning(self.connector.get_chat_response(prompt).content or 'No Response')
 
