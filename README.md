@@ -1,7 +1,7 @@
 # sms-control
 Control your linux machine via SMS and a spare android
 
-This project has gone ar beyond in scope as compared to what I had in mind. The architecture is what I have mainly been working on.
+This project has gone far beyond in scope as compared to what I had in mind. The architecture is what I have mainly been working on.
 
 ## Architecture
 - Plugins: This is for all the actual functionality that the app is responsible for. Plugins are what the input goes to and output comes from. This is also where the tools come from. See [plugin.py](plugins/plugin.py) and [llm_plugin.py](plugins/llm_plugin/llm_plugin.py)
@@ -11,9 +11,9 @@ This project has gone ar beyond in scope as compared to what I had in mind. The 
 - Parsers: This is the connector between the listener and the plugins and tooling pipeline.
 
 
-This is basicall what the project boils down to. Nothing has been documented yet, but I am planning to do a lot once it gets to a decent working state
-.
+This is basicall what the project boils down to. Nothing has been documented yet, but I am planning to do a lot once it gets to a decent working state.
 
+## Running
 Currently whats running is the parser pipeline that you can run with:
 
 ```bash
