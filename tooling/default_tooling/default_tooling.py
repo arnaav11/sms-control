@@ -46,7 +46,7 @@ class DefaultTooling(Tooling):
                 result['output'] += tool_call_output['output']
                 result['callback_output'] += tool_call_output['callback_output']
             except Exception as e:
-                result['output'] = repr(e)
+                result['output'] += repr(e)
 
         return result
 
