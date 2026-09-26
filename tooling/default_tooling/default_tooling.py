@@ -73,14 +73,17 @@ class DefaultTooling(Tooling):
         return result_dict['output']
 
 
-    def run_callback(self, callback_cmd: str, callback_output: str):
+    def run_callback(self, callback_cmd: str, callback_output: str) -> str:
         result = ''
 
         for idx in range(len(self.plugins)):
                 plugin = self.plugins[idx]
                 if callback_cmd in plugin.get_tools():
                     method = plugin.get_tools()[callback_cmd]['method']
-                    command_output = method(callback_output)
+                    try:
+                        command_output = method(callback_output)
+                    except Exception as e:
+                        return f'An error occurred: {repr(e)} \n'
 
                     result = self.call_tools(command_output, callback_cmd=callback_cmd)
                     break
