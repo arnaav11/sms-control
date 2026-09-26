@@ -1,5 +1,5 @@
 # sms-control
-Control your linux machine via SMS and a spare android
+Control your Linux machine via SMS and a spare android
 
 This project has gone far beyond in scope as compared to what I had in mind. The architecture is what I have mainly been working on.
 
@@ -11,10 +11,10 @@ This project has gone far beyond in scope as compared to what I had in mind. The
 - Parsers: This is the connector between the listener and the plugins and tooling pipeline.
 
 
-This is basicall what the project boils down to. Nothing has been documented yet, but I am planning to do a lot once it gets to a decent working state.
+This is basically what the project boils down to. Nothing has been documented yet, but I am planning to do a lot once it gets to a decent working state.
 
 ## Running
-Currently whats running is the parser pipeline that you can run with:
+Currently what's running is the parser pipeline that you can run with:
 
 ```bash
 python3 -m parsers.default_parser.default_parser
