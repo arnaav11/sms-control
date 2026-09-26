@@ -44,11 +44,11 @@ model = 'z-ai/glm-5.3'
 
 reasoning = 'high'
 chat_save_folder = './chats'
-system_message = 'You are a helpful AI Agent'
+with open('./system_messages/test_msg.txt') as f:
+    system_message = f.read()
 max_tokens = 4096
 
 available_reasoning = ['none', 'low', 'medium', 'high']
-response_tool = {'respond': 'Respond to the user. Takes in the response text as the argument'}
 
 # tool_messages = [
 #     'Here are tools:',
