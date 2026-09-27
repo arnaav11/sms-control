@@ -12,6 +12,7 @@ This project has gone far beyond in scope as compared to what I had in mind. The
 
 
 This is basically what the project boils down to. Nothing has been documented yet, but I am planning to do a lot once it gets to a decent working state.
+This whole system is designed to be highly modular and extensible. Every part of the pipeline is changeable. The SMS in the name is mostly just my previous scope, since it is possible to use any type of event to get info/message that is then ran through a modular parser that dynamically registers tools from a list of loaded plugins. All of this modularity was planned way after this project was started.
 
 ## Running
 Currently what's running is the parser pipeline that you can run with:
