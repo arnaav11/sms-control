@@ -26,7 +26,8 @@ allowed_shell_commands = [
     'fastfetch',
     'inxi',
     'free',
-    'df'
+    'df',
+
 ]
 
 shell_plugin = ShellPlugin(
@@ -42,18 +43,13 @@ search_plugin = SearchPlugin(
 base_url = 'https://integrate.api.nvidia.com/v1'
 model = 'z-ai/glm-5.3'
 
-reasoning = 'high'
+reasoning = 'low'
 chat_save_folder = './chats'
 with open('./system_messages/test_msg.txt') as f:
     system_message = f.read()
 max_tokens = 4096
 
 available_reasoning = ['none', 'low', 'medium', 'high']
-
-# tool_messages = [
-#     'Here are tools:',
-#     'use them in json with {"tool_name": {"args": "tool_args", "callback": bool}, "tool_name"....} reply only in json. The callback is for whether you want the output of the tool call to be returned back to you. You can use as many tools as you want.'
-# ]
 
 llm_plugin = LLMPlugin(
     base_url=base_url,
