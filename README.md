@@ -22,3 +22,13 @@ python3 -m parsers.default_parser.default_parser
 ```
 
 For [config.py](config.py), I plan on moving to some other format like YAML, XML etc. But for now, Just the LLM settings need to be changed (See [config.py](config.py#L42-L67)). Also SearXNG needs to be configured for the search tool to work (see [config.py](config.py#L36-39) and [search_connector.py](plugins/search_plugin/search_connector.py)).
+
+
+## Logging
+Logging is being implemented with the `logging` module. Here is the used format for the readme:
+
+`| %(asctime)s | [%(module)s:%(lineno)d] %(levelname): message`
+
+for the threaded tasks there is an added block of thread info
+
+`|%(asctime)s | [%(module)s:%(lineno)d] {%(threadName)s - } %(levelname): message`
