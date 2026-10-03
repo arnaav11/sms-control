@@ -34,10 +34,12 @@ class DefaultParser(Parser):
                     return self.tooling.call_tools(command_output, callback_cmd=command[0])
 
                 return command_output
+        
+        return "Command not found"
 
     
 if __name__ == '__main__':
-    from config import *
+    from config import plugins, tooling
 
     tester = DefaultParser(
         plugins=plugins,
@@ -46,5 +48,8 @@ if __name__ == '__main__':
 
     test_input = input('Enter command: ')
     while test_input != '/quit':
-        print(f'Result: \n{tester.parse_command(test_input)}')
-        test_input = input('Enter command: ')
+        try:
+            print(f'Result: \n{tester.parse_command(test_input)}')
+            test_input = input('Enter command: ')
+        except KeyboardInterrupt:
+            break
