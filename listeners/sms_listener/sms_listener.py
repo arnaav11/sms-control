@@ -16,7 +16,7 @@ class SMSListener(Listener):
         self.app = Flask(__name__)
         self.queue = data_queue
         self.port = port
-        self.api_env = api_env
+        self.api_env = os.getenv(api_env)
 
         self.app.add_url_rule('/api', view_func=self.handle_post, methods=['POST'])
 
