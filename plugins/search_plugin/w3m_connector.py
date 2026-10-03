@@ -1,7 +1,7 @@
 import subprocess
 
 from urllib.parse import urlparse
-from urllib.request import Request, urlopen
+from urllib.request import Request, urlopen, HTTPError
 
 class W3MConnector:
     def __init__(self, exe: str = '/bin/fish', timeout: int = 10):
@@ -13,11 +13,15 @@ class W3MConnector:
             return ''
 
         req = Request(url, headers={"User-Agent": "Mozilla/5.0"})
-        with urlopen(req, timeout=self.timeout) as response:
-            charset = response.headers.get_content_charset() or "utf-8"
-            website_html = response.read().decode(charset, errors="replace")
 
-        return self.parse_html(website_html)
+        try:
+            with urlopen(req, timeout=self.timeout) as response:
+                charset = response.headers.get_content_charset() or "utf-8"
+                website_html = response.read().decode(charset, errors="replace")
+
+            return self.parse_html(website_html)
+        except HTTPError as e:
+            return repr(e)
 
     def validate_url(self, url: str) -> bool:
         parsed_url = urlparse(url.strip())

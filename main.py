@@ -1,36 +1,44 @@
+import logging
+
 from queue import Queue, Empty
 
 from listeners.listener import Listener
 from parsers.parser import Parser
+from loggers.logger import Logger
+from config import sms_queue, parser, listener, logger
 
-def parse_sms(sms_data: dict, parser: Parser) -> None:
+
+def parse_sms(sms_data: dict, parser: Parser, logger: Logger) -> None:
+    logger.info('Message sent to parser')
     return parser.parse_command(sms_data['content'])
 
 
-def main(sms_queue: Queue, listener: Listener, command_parser: Parser):
-    listener.start()
-    
+def main(sms_queue: Queue, listener: Listener, command_parser: Parser, logger: Logger):
     try:
-        while True:
-            try:
-                incoming_sms = sms_queue.get(timeout=1)
-                print(f'parsing SMS \nInfo: {incoming_sms} \n')
+        logger.info(f'Starting listener')
+        listener.start()
+    except Exception as e:
+        logging.error(repr(e))
 
-                print(parse_sms(incoming_sms, command_parser))
+    while True:
+        try:
+            incoming_sms = sms_queue.get(timeout=1)
+            logger.info(f'Listener event detected, sending message to parser')
 
-                sms_queue.task_done()
+            # TODO Make this post pipeline response action modular and expandable
+            print(parse_sms(incoming_sms, command_parser, logger))
 
-            except Empty:
-                pass
-            except Exception as e:
-                print(f'Error occurred: \n{repr(e)}\n')
+            sms_queue.task_done()
+            logger.info('Task has been completed, waiting for next event')
 
-    except KeyboardInterrupt:
-        print("\n[Main Program] Shutting down...")
+        except Empty:
+            pass
+        except KeyboardInterrupt:
+            logger.info('Exiting')
+        except Exception as e:
+            logger.error(repr(e))
 
 
 if __name__ == '__main__':
-    from config import *
-
-    main(sms_queue, listener, parser)
+    main(sms_queue, listener, parser, logger)
 

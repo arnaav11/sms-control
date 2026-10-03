@@ -27,7 +27,9 @@ class ShellPlugin(Plugin):
         return self.allowed_commands
 
     def run_command(self, command: str) -> str:
+
         if self.connector.allow_command(command.split()):
-            return self.connector.run_command(command).stdout
+            result = self.connector.run_command(command)
+            return result.stdout or result.stderr
         else:
             return 'Command not allowed'

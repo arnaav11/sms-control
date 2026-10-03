@@ -6,6 +6,8 @@ from plugins.search_plugin.w3m_connector import W3MConnector
 class SearchPlugin(Plugin):
     def __init__(self, search_url: str, exe: str = '/bin/fish'):
         super().__init__()
+
+        self.tool_calling = False
         
         self.search_connector = SearchConnector(base_url=search_url)
         self.w3m_connector = W3MConnector(exe=exe)

@@ -30,7 +30,7 @@ class LLMPlugin(Plugin):
         self.tool_calling = use_tools
         self.system_message = system_message
 
-        self.tools = available_tools
+        self.available_tools = available_tools
         self.setup_tool_message()
 
         self.callback_method = 'chat'
@@ -70,7 +70,7 @@ class LLMPlugin(Plugin):
 
     
     def set_available_tools(self, tools: dict[str, str]) -> None:
-        self.tools = tools
+        self.available_tools = tools
         self.setup_tool_message()
 
 
@@ -101,8 +101,8 @@ class LLMPlugin(Plugin):
     def setup_tool_message(self) -> None:
         tool_message = ''
         n = 1
-        for tool in self.tools:
-            tool_message += f'{n}. {tool}: {self.tools[tool]}\n'
+        for tool in self.available_tools:
+            tool_message += f'{n}. {tool}: {self.available_tools[tool]}\n'
             n += 1
 
         self.cur_msg = self.system_message

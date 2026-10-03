@@ -14,15 +14,16 @@ class DefaultTooling(Tooling):
         self.extract_tools()
 
     def call_tool(self, tool: str, tool_call: dict[Literal['args', 'callback'], str]) -> dict[Literal['output', 'callback_output'], str]:
-        if self.cur_depth > self.max_depth:
-            return{
-                'output': 'Max tool depth reached',
-                'callback_output': 'Max tool depth reached' if tool_call['callback'] else ''
-            }
-        elif tool == 'respond':
+        if tool == 'respond':
             return {
                 'output': f'\n{tool_call["args"]}\n',
                 'callback_output': ''
+            }
+
+        elif self.cur_depth == self.max_depth:
+            return {
+                'output': 'Max tool depth reached',
+                'callback_output': 'Max tool depth reached' if tool_call['callback'] else ''
             }
 
         tool_call_output = self.tools[tool]['method'](tool_call['args'])
@@ -32,7 +33,7 @@ class DefaultTooling(Tooling):
             'callback_output': f'\n{tool_call_output}\n' if tool_call['callback'] else ''
         }
 
-    def call_tools_dict(self, tools: dict[str, dict[Literal['args', 'callback'], str]]) -> dict[Literal['output', 'callback_output'], str]:
+    def call_tools_dict(self, tools: dict[str, dict[Literal['args', 'callback'], str]], callback_cmd: str) -> dict[Literal['output', 'callback_output'], str]:
         result = {
             'output': '',
             'callback_output': ''
@@ -45,6 +46,14 @@ class DefaultTooling(Tooling):
                 tool_call_output = self.call_tool(tool, tools[tool])
                 result['output'] += tool_call_output['output']
                 result['callback_output'] += tool_call_output['callback_output']
+            except KeyError:
+                print('Not a tool call, or invalid call')
+                print(tools)
+                return {
+                    'output': self.run_callback(callback_cmd, f'{str(tools)[:30]}... is not a valid Tool call.'), 
+                    'callback_output': ''
+                }
+
             except Exception as e:
                 result['output'] += repr(e)
 
@@ -54,13 +63,16 @@ class DefaultTooling(Tooling):
         try:
             tools_dict = json.loads(tools)
         except json.decoder.JSONDecodeError:
-            print('Not a tool call, or invalid call')
-            print(tools[:15])
+            print('Not a tool call, or invalid call')            
             return tools
+
+
+        if self.cur_depth > self.max_depth:
+            return f'Could not run "{tools[:30]}...", max tool dept reached'
         
         self.cur_depth += 1
 
-        result_dict = self.call_tools_dict(tools_dict)
+        result_dict = self.call_tools_dict(tools_dict, callback_cmd)
         result_dict['callback_output'] = result_dict['callback_output'].strip()
         result_dict['output'] = result_dict['output'].strip()
 
@@ -94,6 +106,3 @@ class DefaultTooling(Tooling):
     def extract_tools(self):
         for plugin in self.plugins:
             self.tools.update(plugin.get_tools())
-
-
-        

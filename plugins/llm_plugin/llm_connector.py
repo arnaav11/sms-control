@@ -46,7 +46,7 @@ class LLMConnector:
     def get_reasoning(self) -> str:
         return self.reasoning
     
-    def set_reasoning(self, reasoning = str) -> str:
+    def set_reasoning(self, reasoning: str) -> str:
         try:
             self.reasoning = reasoning
             max_tok = self.max_tokens
@@ -76,7 +76,7 @@ class LLMConnector:
     def get_chat(self) -> list[dict[str, str]]:
         return self.chat
     
-    def set_chat(self, chat = list[dict[str, str]]) -> None:
+    def set_chat(self, chat: list[dict[str, str]]) -> None:
         self.chat = chat
 
     def reset_chat(self) -> None:
